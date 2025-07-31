@@ -4,30 +4,24 @@ const { UnauthenticatedError } = require('../errors')
 
 
 const auth =(req, res, next) =>{
-    //check header
-const authHeader = req.headers.authorization;
-// token Bearer ile başlıyor mu
-if(!authHeader || !authHeader.startsWith('Bearer')){
-    throw new UnauthenticatedError ('Authentication invalid')
-}
+    const authHeader = req.headers.authorization;
 
-// token'ı header'dan ayıklıyoruz
-const token = authHeader.split(' ')[1] 
+    if(!authHeader || !authHeader.startsWith('Bearer')){
+        throw new UnauthenticatedError ('Authentication invalid')
+    }
 
-try{
-    //geçerli mi?
-    const payload = jwt.verify(token, process.env.JWT_SECRET)
-    // attach the user to the job routes
 
-    const user = User.findById(payload.userId).select('-password')
-    req.user = user 
+    const token = authHeader.split(' ')[1] 
 
-    req.user = {userId:payload.userId, name: payload.name}
-    next();
+    try{
+        const payload = jwt.verify(token, process.env.JWT_SECRET)
+        const user = User.findById(payload.userId).select('-password')
+        req.user = user 
+        req.user = {userId:payload.userId, name: payload.name}
+        next();
 
-} catch (error) { 
+    } catch (error) { 
     throw new UnauthenticatedError('Authentication invalid')
-
-}}
+    }}
 
 module.exports = auth

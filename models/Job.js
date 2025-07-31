@@ -1,6 +1,4 @@
-const { required } = require('joi')
 const mongoose = require('mongoose')
-
 const JobSchema = new mongoose.Schema({
 
     company:{
@@ -15,14 +13,13 @@ const JobSchema = new mongoose.Schema({
     },
     status:{
         type: String,
-        enum : [ true, 'interview','declined','pending'],
+        enum : ['interview','declined','pending'],
         default: 'pending' ,
     },
-    createdBY:{
+    createdBy:{
         type:mongoose.Types.ObjectId,
         ref: 'User' ,
         required: [true , 'Please provide user']
-     
     }
 },{timestamps:true})
 

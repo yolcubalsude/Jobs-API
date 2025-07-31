@@ -8,9 +8,9 @@ const xss = require ('xss-clean')
 const rateLimiter = require ('express-rate-limit')
 
 
-
 const express = require('express');
 const app = express();
+
 
 // connectDB
 const connectDB = require('./db/connect');
@@ -40,18 +40,11 @@ app.use(xss());
 
 
 
-
-
 // routes
 app.use('/api/v1/auth', authRouter);
 app.use('/api/v1/jobs', authenticateUser, jobsRouter);
 
 
-
-/* We Weapp.get('/', (req, res) => {
-  res.send('jobs api');
-});
-*/
 app.use(notFoundMiddleware);
 app.use(errorHandlerMiddleware);
 
